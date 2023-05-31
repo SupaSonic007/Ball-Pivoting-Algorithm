@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Any
 import numpy as np
 
@@ -53,9 +54,8 @@ class Point:
         :return: An array of neighbouring points in the radius with distances
         """
 
-        # TODO
-
         neighbours = []
+        distances = []
 
         for point in point_cloud:
             point: Point
@@ -63,9 +63,10 @@ class Point:
                 continue
             distance = self.distance_to_point(point)
             if distance < radius:
-                neighbours.append((point, distance))
+                neighbours.append(point)
+                distances.append(distance)
 
-        return np.array(neighbours)
+        return np.array(neighbours), np.array(distances)
 
     def distance_to_point(self, point) -> float:
         """
@@ -73,7 +74,9 @@ class Point:
         :param point: Point to compare location to
         :return: distance to 
         """
-        
+
+        # √((a2-a1)^2 + (b2-b1)^2 + (c2-c1)^2)
+
         x = np.power(point.x-self.x, 2)
         y = np.power(point.y-self.y, 2)
         z = np.power(point.z-self.z, 2)
@@ -88,6 +91,15 @@ class Point:
 
         return float(distance)
 
-    def get_closest_point(self, points: np.array):
+    def get_closest_point(self, points: np.array, distances: np.array) -> Point:
+        """
+        Get the vertex closest to this vertex
+        :param points: NumPy Array of Point objects -> return the closest
+        :param distances: NumPy Array of floating point numbers to find the minimum
+        :return: Point object with the closest relative position
+        """
 
-        pass
+        closest_index = np.where(distances == min(distances))
+        closest = points[closest_index]
+
+        return closest

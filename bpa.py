@@ -62,8 +62,11 @@ class BallPivotingAlgorithm:
 
         first_point = self.point_cloud[0]
 
-        neighbours = first_point.find_neighbouring_vertices_with_distance(
+        # Testing Point methods
+        neighbours, distances = first_point.find_neighbouring_vertices_with_distance(
             self.point_cloud, self.radius)
+
+        closest_point = first_point.get_closest_point(points=neighbours, distances=distances)
 
         return
 
