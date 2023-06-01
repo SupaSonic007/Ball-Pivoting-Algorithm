@@ -1,6 +1,6 @@
 import numpy as np
-import open3d as o3d
-# Using numpy as it is faster for mathematical operations
+import open3d as o3d # numpy faster in math operations
+
 from edge import Edge
 from face import Face
 from point import Point
@@ -25,6 +25,7 @@ class BallPivotingAlgorithm:
     def open_point_cloud(self, file_location: str) -> None:
         """
         Opens an object file, filtering out the points in the point cloud
+        :param file_location: The location of the object file
         """
 
         file_list = ['obj']
@@ -75,7 +76,7 @@ class BallPivotingAlgorithm:
         first_edge:Edge
 
         # Find third point through shared neighbour along edge (Cylindrical space)
-
+        first_edge.find_third_point(self.point_cloud, self.radius)
 
         # First point -> Second point through closest neighbour
         # distance: +/-(p1 -> p2 * radius) to get bounding box (above and below), find third point between

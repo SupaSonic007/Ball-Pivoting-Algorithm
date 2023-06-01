@@ -1,8 +1,10 @@
 from __future__ import annotations
-import open3d as o3d
+
 import numpy
+import open3d as o3d
+
 
 class Visualiser:
 
-    def __init__(self, file_location) -> None:
+    def __init__(self) -> None:
         return
