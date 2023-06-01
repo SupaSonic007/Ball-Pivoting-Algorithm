@@ -1,9 +1,10 @@
 import numpy as np
-import Open3d as o3d
+import open3d as o3d
 # Using numpy as it is faster for mathematical operations
 from edge import Edge
 from face import Face
 from point import Point
+from visualiser import Visualiser
 
 
 class BallPivotingAlgorithm:
@@ -17,6 +18,7 @@ class BallPivotingAlgorithm:
         self.point_cloud = point_cloud or np.ndarray([])
         if file_location:
             self.open_point_cloud(file_location)
+            self.file_location = file_location
         self.radius = radius
         return
 
@@ -62,6 +64,18 @@ class BallPivotingAlgorithm:
         """
 
         first_point = self.point_cloud[0]
+        first_point:Point
+
+        # Find second point by distance
+        neighbours, distances = first_point.find_neighbouring_vertices_with_distance(self.point_cloud, self.radius)
+        second_point = first_point.get_closest_point(neighbours, distances)
+        second_point:Point
+
+        first_edge = Edge(first_point, second_point)
+        first_edge:Edge
+
+        # Find third point through shared neighbour along edge (Cylindrical space)
+
 
         # First point -> Second point through closest neighbour
         # distance: +/-(p1 -> p2 * radius) to get bounding box (above and below), find third point between
@@ -86,7 +100,6 @@ class BallPivotingAlgorithm:
         Runs the Ball Pivoting Algorithm to compute a triangle mesh interpolating the point cloud.
         :return: A triangle mesh interpolating the point cloud.
         """
-
         self.find_seed_triangle()
 
         return np.array([])
@@ -94,7 +107,7 @@ class BallPivotingAlgorithm:
 
 def main():
 
-    bpa = BallPivotingAlgorithm(0.003, file_location='./stanford-bunny.obj')
+    bpa = BallPivotingAlgorithm(0.003, file_location='stanford-bunny.obj')
     bpa.run()
 
     pass
