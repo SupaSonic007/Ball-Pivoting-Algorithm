@@ -11,3 +11,6 @@ class Face:
 
     def __call__(self, *args: Any, **kwds: Any) -> np.array:
         return np.array(self.p1, self.p2, self.p3)
+
+    def get_points(self):
+        return np.array(self.p1, self.p2, self.p3)

@@ -1,4 +1,5 @@
 import numpy as np
+import Open3d as o3d
 # Using numpy as it is faster for mathematical operations
 from edge import Edge
 from face import Face
@@ -62,15 +63,16 @@ class BallPivotingAlgorithm:
 
         first_point = self.point_cloud[0]
 
-        # Testing Point methods
-        neighbours, distances = first_point.find_neighbouring_vertices_with_distance(
-            self.point_cloud, self.radius)
-
-        closest_point = first_point.get_closest_point(points=neighbours, distances=distances)
+        # First point -> Second point through closest neighbour
+        # distance: +/-(p1 -> p2 * radius) to get bounding box (above and below), find third point between
+        # If no point found, move on, no face/triangle
 
         return
+    
+    def find_third_point(self, point1:Point, point2:Point) -> Point:
+        pass
 
-    def pivot_ball(self, edge):
+    def pivot_ball(self, edge:Edge):
         """
         Pivots the ball around the given edge until it touches another point.
         :param edge: The edge to pivot the ball around.

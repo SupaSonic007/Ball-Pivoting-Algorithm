@@ -18,7 +18,7 @@ class Point:
             self.location = location
 
     def __call__(self, *args: Any, **kwds: Any) -> tuple:
-        return (self.x, self.y, self.z)
+        return self.location
 
     def __repr__(self) -> str:
         return f"<Point {self.x, self.y, self.z}>"
@@ -30,8 +30,6 @@ class Point:
         :param radius: The radius to search for neighbours
         :return: An array of neighbouring points in the radius
         """
-
-        # TODO
 
         neighbours = []
 
@@ -91,7 +89,7 @@ class Point:
 
         return float(distance)
 
-    def get_closest_point(self, points: np.array, distances: np.array) -> Point:
+    def get_closest_point(self, points: np.array, distances: np.array, exclude: list = None) -> Point:
         """
         Get the vertex closest to this vertex
         :param points: NumPy Array of Point objects -> return the closest
@@ -103,3 +101,10 @@ class Point:
         closest = points[closest_index]
 
         return closest
+
+    def get_location(self) -> tuple:
+        """
+        Get the location of the point
+        :return: The location of the point
+        """
+        return self.location
