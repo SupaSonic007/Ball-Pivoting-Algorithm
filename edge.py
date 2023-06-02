@@ -2,6 +2,7 @@ from typing import Any
 
 import numpy as np
 from point import Point
+import trigonometry as trig
 
 class Edge:
 
@@ -30,16 +31,28 @@ class Edge:
         :return: The third point of the triangle
         """
         
-        # Get neighbours from p1 and p2, then center of edge
-        p1_neighbours_points, p1_neighbours_distances = self.p1.find_neighbouring_vertices_with_distance(point_cloud, radius)
-        p2_neighbours_points, p2_neighbours_distances = self.p2.find_neighbouring_vertices_with_distance(point_cloud, radius)
+        points_and_distances = []
 
-        # Get box betweek p1 & p2 & radius (./vennsquare.png)
-        # Get points in box
-        
-        
+        for point in point_cloud:
+            point: Point
+            if point == self.p1 or point == self.p2: continue
+            # Get angle from cosine rule and then find distance using sine rule
+            a = self.p1.distance_to_point(point)
+            b = self.p2.distance_to_point(point)
+            c = self.p1.distance_to_point(self.p2)
+            angleC = trig.cosine_rule(a, b, c)
+            angleA = trig.cosine_rule(b, c, a)
 
-        return
-    
+            distance_to_third_point = trig.sine_rule_for_side(a, angleA, angleC)
+            
+            if not distance_to_third_point <= radius: continue
+
+            points_and_distances.append((point, distance_to_third_point))
+        
+        # Sort the points by distance
+        closest = points_and_distances.sort(key=lambda x: x[1])[0]
+        
+        return closest[0]
+
     def __call__(self, *args: Any, **kwds: Any) -> tuple:
         return self.get_points()

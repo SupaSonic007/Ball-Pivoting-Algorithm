@@ -100,7 +100,7 @@ class Point:
         closest_index = np.where(distances == min(distances))
         closest = points[closest_index]
 
-        return closest
+        return closest[0]
 
     def get_location(self) -> tuple:
         """

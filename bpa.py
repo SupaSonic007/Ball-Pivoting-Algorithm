@@ -1,5 +1,5 @@
-import numpy as np
-import open3d as o3d # numpy faster in math operations
+import numpy as np # numpy faster in math operations
+import open3d as o3d
 
 from edge import Edge
 from face import Face
@@ -30,8 +30,7 @@ class BallPivotingAlgorithm:
 
         file_list = ['obj']
         if file_location.split('.')[-1] not in file_list:
-            raise (ValueError(
-                f"Only able to read object data of types {file_list}"))
+            raise ValueError(f"Only able to read object data of types {file_list}")
 
         with open(file_location, 'r') as f:
             # Initialise points to be added to numpy array
@@ -43,16 +42,14 @@ class BallPivotingAlgorithm:
                     continue
                 # Segments of string
                 segments = line.split()
-                if not segments[0] == 'v':
-                    continue
 
-                points.append(
-                    [
+                if segments[0] != 'v': continue
+
+                points.append([
                         float(segments[1]),
                         float(segments[2]),
                         float(segments[3])
-                    ]
-                )
+                    ])
 
             self.point_cloud = np.array([Point(point) for point in points])
 
@@ -76,7 +73,7 @@ class BallPivotingAlgorithm:
         first_edge:Edge
 
         # Find third point through shared neighbour along edge (Cylindrical space)
-        first_edge.find_third_point(self.point_cloud, self.radius)
+        third_point = first_edge.find_third_point(self.point_cloud, self.radius)
 
         # First point -> Second point through closest neighbour
         # distance: +/-(p1 -> p2 * radius) to get bounding box (above and below), find third point between
@@ -93,6 +90,9 @@ class BallPivotingAlgorithm:
         :param edge: The edge to pivot the ball around.
         :return: The next triangle formed by the ball pivoting around the edge.
         """
+        
+        # Find third point of triangle
+        third_point = edge.find_third_point(self.point_cloud, self.radius)
 
         return
 
@@ -102,6 +102,8 @@ class BallPivotingAlgorithm:
         :return: A triangle mesh interpolating the point cloud.
         """
         self.find_seed_triangle()
+        while self.points_left():
+            pass
 
         return np.array([])
 
