@@ -208,7 +208,7 @@ class BallPivotingAlgorithm:
 
 def main():
 
-    bpa = BallPivotingAlgorithm(0.003, file_location='stanford-bunny.obj')
+    bpa = BallPivotingAlgorithm(0.0025, file_location='stanford-bunny.obj')
     bpa.run()
 
     pass
