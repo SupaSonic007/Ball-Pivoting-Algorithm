@@ -10,18 +10,12 @@ class Face:
     A face is a triangle made up of three points.
     """
     
-    def __init__(self, points:tuple, indexes_for_points:tuple) -> None:
+    def __init__(self, points:tuple, edges:tuple, indexes_for_points:tuple) -> None:
         """
         Initialise the face with three points & edges
         :param points: The three points
         :param edges: The three edges
         """
-        
-        edges = [
-            Edge(points[0], points[1]),
-            Edge(points[0], points[2]),
-            Edge(points[1], points[2])
-        ]
 
         self.p1 = points[0]
         self.p2 = points[1]

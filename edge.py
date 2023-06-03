@@ -12,13 +12,7 @@ class Edge:
         :param p1: The first point
         :param p2: The second point
         """
-        
-        points = [p1, p2]
-        points.sort(key=lambda x: (x.x, x.y, x.z))
-        
-        p1 = points[0]
-        p2 = points[1]
-
+                
         self.p1 = p1
         self.p2 = p2
         self.edge = (p1, p2)
