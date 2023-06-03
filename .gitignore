@@ -2,3 +2,5 @@ __pycache__
 venv
 .prettierrc
 .vscode
+*_edited.obj
+*_point_cloud.obj
