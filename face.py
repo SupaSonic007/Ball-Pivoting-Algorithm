@@ -1,6 +1,7 @@
 from typing import Any
 
 import numpy as np
+import random
 from point import Point
 from edge import Edge
 
@@ -60,11 +61,8 @@ class Face:
         :return: The new edge for the new face
         """
         # If an edge has 2 connections, don't use it because there will be overlap
-        if self.edge2.connections < 2:
-            return self.edge2
-        elif self.edge3.connections < 2:
-            return self.edge3
-        elif self.edge1.connections < 2:
-            return self.edge1
-        else:
-            return None
+        edge = self.edge3
+        if edge.connections >= 2: edge=self.edge2
+        if edge.connections >= 2: edge=self.edge1
+        if edge.connections >= 2: edge=None
+        return edge
