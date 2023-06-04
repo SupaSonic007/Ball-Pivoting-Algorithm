@@ -59,12 +59,12 @@ class Face:
         Get a new edge to start from to build a new face
         :return: The new edge for the new face
         """
-        # If an edge has 2 connections, don't use it otherwise there will be overlap
-        if self.edge1.connections < 2:
-            return self.edge1
-        elif self.edge2.connections < 2:
+        # If an edge has 2 connections, don't use it because there will be overlap
+        if self.edge2.connections < 2:
             return self.edge2
         elif self.edge3.connections < 2:
             return self.edge3
+        elif self.edge1.connections < 2:
+            return self.edge1
         else:
             return None

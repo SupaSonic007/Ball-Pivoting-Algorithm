@@ -60,13 +60,15 @@ class Edge:
         # Sort the points by distance (the larger the angle, the closer the point is to the middle of the edge)
         points_and_distances.sort(key=lambda x: x[1], reverse=True)
         
-        if len(points_and_distances) == 0: self.connections += 1
-        
+        if len(points_and_distances) == 0: return None
+
+        self.connections += 1
+
         return points_and_distances[0][0]
 
     def check_overlap(self, edge:tuple, point:Point, faces:list) -> bool:
         """
-        Check if the edge overlaps with any other edges
+        Check if the face already exists in the list of faces
         :param edge: The edge to check for overlaps
         :param point: The point to check against
         :param faces: The faces to check for overlaps
@@ -76,8 +78,8 @@ class Edge:
 
         for face in faces:
             face:Face
-            if self.p1 in face.get_points() and self.p2 in face.get_points() and point in face.get_points():
-                return True
-            
+            points = face.get_points()
+            # if all points are in the face, then it's the same face
+            if set([self.p1, self.p2, point]).issubset(points): return True            
                 
         return False

@@ -4,6 +4,8 @@ import open3d as o3d
 from edge import Edge
 from face import Face
 from point import Point
+
+
 from visualiser import Visualiser
 
 
@@ -88,7 +90,6 @@ class BallPivotingAlgorithm:
 
         # np.where(xxx)[0][0] gets the index of the point in the point cloud for use in saving to file later
         seed_triangle = Face((first_point, second_point, third_point), (first_edge, second_edge, third_edge), (np.where(self.point_cloud == first_point)[0][0], np.where(self.point_cloud == second_point)[0][0], np.where(self.point_cloud == third_point)[0][0]))
-        self.faces.append(seed_triangle)
 
         return seed_triangle
 
@@ -102,27 +103,15 @@ class BallPivotingAlgorithm:
         # Find third point of triangle
         third_point = edge.find_third_point(self.point_cloud, self.radius, self.faces)
 
-        edge_1_exists = False
-        edge_2_exists = False
-        second_edge = None
-        third_edge = None
+        second_edge = Edge(edge.p1, third_point)
+        third_edge = Edge(edge.p2, third_point)
+        self.edges.append(second_edge)
+        self.edges.append(third_edge)
 
-        for self_edge in self.edges:
-            # Check if the other 2 edges exist in self.edges, if not, add them
-            if edge_1_exists and edge_2_exists:
-                break
-            elif edge.p1 in self_edge.get_points() and third_point in self_edge.get_points():
-                edge_1_exists = True
-                second_edge = self_edge
-            elif edge.p2 in self_edge.get_points() and third_point in self_edge.get_points():
-                edge_2_exists = True
-                third_edge = self_edge
-            else:
-                second_edge = Edge(edge.p1, third_point)
-                third_edge = Edge(edge.p2, third_point)
-                self.edges.append(second_edge)
-                self.edges.append(third_edge)
-            
+        self.edges = list(set(self.edges))
+        
+        print(third_point)
+        print(np.where(self.point_cloud == edge.p1)[0][0], np.where(self.point_cloud == edge.p2)[0][0], np.where(self.point_cloud == third_point)[0][0])
         # np.where(xxx)[0][0] gets the index of the point in the point cloud for use in saving to file later
         return Face((edge.p1, edge.p2, third_point), (edge, second_edge, third_edge), (np.where(self.point_cloud == edge.p1)[0][0], np.where(self.point_cloud == edge.p2)[0][0], np.where(self.point_cloud == third_point)[0][0]))
 
@@ -169,12 +158,8 @@ class BallPivotingAlgorithm:
 
         # ! Not implemented yet. Don't worry about this
         
-        # variables
-        points_left = False
-
         for edge in self.edges:
             if edge.connections < 2:
-                points_left = True
                 return True
             
         return False
@@ -188,16 +173,16 @@ class BallPivotingAlgorithm:
         seed_triangle = self.find_seed_triangle()
         self.faces.append(seed_triangle)
         edge = seed_triangle.get_new_edge()
-        for i in range(10): # Only run 10 iterations to test, still slow but don't worry about that
+        for i in range(20): # Only run x iterations to test, still slow but don't worry about that
             
             face = self.pivot_ball(edge)
             self.faces.append(face)
             
             edge = face.get_new_edge() # <---- To understand how this works, please check face.py (It's quite simple but important)
             print(i+1)
+            k = 0
             while edge == None:
-                k = 0
-                if k > len(self.faces): break
+                if k > len(self.faces): self.write_to_file(); quit()
                 face = self.faces[k]
                 edge = face.get_new_edge()
                 k += 1
