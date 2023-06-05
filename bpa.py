@@ -1,4 +1,4 @@
-import numpy as np  # numpy faster in math operations
+import numpy as np  # numpy is faster in math operations
 
 from edge import Edge
 from face import Face
@@ -8,6 +8,14 @@ from point import Point
 class BallPivotingAlgorithm:
     """
     An algorithm for reconstructing surfaces of a mesh.
+
+    The algorithm works by checking a radius around a point to find another point and link them to create an edge.
+    The algorithm then finds a third point from that edge in a certain radius to create a face.
+    The algorithm then continues to use a new edge formed from a face to find a third point and create a new face.
+
+    Works from a seed triangle and continues to create faces and edges until there are no more points left.
+
+    To run -> initialise the class with a point cloud and radius, then call run() to run the algorithm. Other options are available to modify the user experience.
     """
 
     faces = []
