@@ -24,7 +24,10 @@ class BallPivotingAlgorithm:
             self.open_point_cloud(file_location)
             self.file_location = file_location
         self.radius = radius
-        self.iterations=iterations
+        if iterations:
+            self.iterations=iterations
+        else:
+            self.iterations = len(self.point_cloud)
         return
 
     def open_point_cloud(self, file_location: str) -> None:
@@ -169,12 +172,12 @@ class BallPivotingAlgorithm:
         seed_triangle = self.find_seed_triangle()
         self.faces.append(seed_triangle)
         edge = seed_triangle.get_new_edge()
-        for i in range(self.iterations): # Only run x iterations to test, still slow but don't worry about that
+        for i in range(self.iterations): # Only run x iterations if you only want x faces (If it's a large point cloud, creating the entire mesh will take a while)
             
             face = self.pivot_ball(edge)
             self.faces.append(face)
             
-            edge = face.get_new_edge() # <---- To understand how this works, please check face.py (It's quite simple but important)
+            edge = face.get_new_edge() # Get the next edge to pivot around from the new face
             print(f"Point: {i+1}/{self.iterations} ☑️")
             k = 0
             # If you can't find the next edge, check on all other faces to see if there is one available, if not, quit as there are no more faces to add
@@ -192,8 +195,6 @@ def main(radius:float, file_location:str, iterations:int):
 
     bpa = BallPivotingAlgorithm(radius=radius, file_location=file_location, iterations=iterations)
     bpa.run()
-
-    pass
 
 
 if __name__ == '__main__':
