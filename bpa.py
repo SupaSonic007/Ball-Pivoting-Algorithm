@@ -17,7 +17,7 @@ class BallPivotingAlgorithm:
     faces = []
     edges = []
 
-    def __init__(self, radius: float, point_cloud: np.ndarray = None, file_location: str = None) -> None:
+    def __init__(self, radius: float, point_cloud: np.ndarray = None, file_location: str = None, iterations: int = None) -> None:
         """
         Initializes the Ball Pivoting Algorithm with the given point cloud and radius.
         :param point_cloud: The point cloud to be interpolated.
@@ -28,6 +28,7 @@ class BallPivotingAlgorithm:
             self.open_point_cloud(file_location)
             self.file_location = file_location
         self.radius = radius
+        self.iterations=iterations
         return
 
     def open_point_cloud(self, file_location: str) -> None:
@@ -110,8 +111,8 @@ class BallPivotingAlgorithm:
 
         self.edges = list(set(self.edges))
         
-        print(third_point)
-        print(np.where(self.point_cloud == edge.p1)[0][0], np.where(self.point_cloud == edge.p2)[0][0], np.where(self.point_cloud == third_point)[0][0])
+        (third_point)
+        (np.where(self.point_cloud == edge.p1)[0][0], np.where(self.point_cloud == edge.p2)[0][0], np.where(self.point_cloud == third_point)[0][0])
         # np.where(xxx)[0][0] gets the index of the point in the point cloud for use in saving to file later
         return Face((edge.p1, edge.p2, third_point), (edge, second_edge, third_edge), (np.where(self.point_cloud == edge.p1)[0][0], np.where(self.point_cloud == edge.p2)[0][0], np.where(self.point_cloud == third_point)[0][0]))
 
@@ -173,13 +174,13 @@ class BallPivotingAlgorithm:
         seed_triangle = self.find_seed_triangle()
         self.faces.append(seed_triangle)
         edge = seed_triangle.get_new_edge()
-        for i in range(20): # Only run x iterations to test, still slow but don't worry about that
+        for i in range(self.iterations): # Only run x iterations to test, still slow but don't worry about that
             
             face = self.pivot_ball(edge)
             self.faces.append(face)
             
             edge = face.get_new_edge() # <---- To understand how this works, please check face.py (It's quite simple but important)
-            print(i+1)
+            (i+1)
             k = 0
             while edge == None:
                 if k > len(self.faces): self.write_to_file(); quit()
@@ -191,13 +192,13 @@ class BallPivotingAlgorithm:
 
         return np.array([])
 
-def main():
+def main(iterations:int):
 
-    bpa = BallPivotingAlgorithm(0.0025, file_location='stanford-bunny.obj')
+    bpa = BallPivotingAlgorithm(0.0025, file_location='stanford-bunny.obj', iterations=iterations)
     bpa.run()
 
     pass
 
 
 if __name__ == '__main__':
-    main()
+    main(iterations=30)

@@ -40,7 +40,7 @@ class Point:
             distance = self.distance_to_point(point)
             if distance < radius:
                 neighbours.append(point)
-                print(self, point)
+                (self, point)
 
         return np.array(neighbours)
 
