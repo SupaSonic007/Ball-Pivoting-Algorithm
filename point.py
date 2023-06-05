@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 from typing import Any
+
 import numpy as np
 
 
@@ -34,13 +36,11 @@ class Point:
         neighbours = []
 
         for point in point_cloud:
-            point: Point
             if point == self:
                 continue
             distance = self.distance_to_point(point)
             if distance < radius:
                 neighbours.append(point)
-                (self, point)
 
         return np.array(neighbours)
 
@@ -56,7 +56,6 @@ class Point:
         distances = []
 
         for point in point_cloud:
-            point: Point
             if point == self:
                 continue
             distance = self.distance_to_point(point)

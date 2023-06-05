@@ -1,8 +1,7 @@
 from typing import Any
 
 import numpy as np
-import random
-from point import Point
+
 from edge import Edge
 
 
@@ -10,8 +9,8 @@ class Face:
     """
     A face is a triangle made up of three points.
     """
-    
-    def __init__(self, points:tuple, edges:tuple, indexes_for_points:tuple) -> None:
+
+    def __init__(self, points: tuple, edges: tuple, indexes_for_points: tuple) -> None:
         """
         Initialise the face with three points & edges
         :param points: The three points
@@ -40,21 +39,21 @@ class Face:
 
     def __repr__(self) -> str:
         return f"<Face {self.edge1, self.edge2, self.edge3}>"
-    
+
     def get_points(self):
         """
         Return the points for each face as an array
         :return: An array containing the three points connected as the face
         """
         return np.array([self.p1, self.p2, self.p3])
-    
+
     def get_edges(self):
         """
         Return the edges for each face as an array
         :return: An array containing the three edges connected as the face
         """
         return np.array([self.edge1, self.edge2, self.edge3])
-    
+
     def get_new_edge(self) -> Edge:
         """
         Get a new edge to start from to build a new face
@@ -62,7 +61,10 @@ class Face:
         """
         # If an edge has 2 connections, don't use it because there will be overlap
         edge = self.edge3
-        if edge.connections >= 2: edge=self.edge2
-        if edge.connections >= 2: edge=self.edge1
-        if edge.connections >= 2: edge=None
+        if edge.connections >= 2:
+            edge = self.edge2
+        if edge.connections >= 2:
+            edge = self.edge1
+        if edge.connections >= 2:
+            edge = None
         return edge

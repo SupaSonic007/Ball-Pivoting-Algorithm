@@ -1,12 +1,8 @@
-import numpy as np # numpy faster in math operations
-import open3d as o3d
+import numpy as np  # numpy faster in math operations
 
 from edge import Edge
 from face import Face
 from point import Point
-
-
-from visualiser import Visualiser
 
 
 class BallPivotingAlgorithm:
@@ -111,7 +107,6 @@ class BallPivotingAlgorithm:
 
         self.edges = list(set(self.edges))
         
-        (third_point)
         (np.where(self.point_cloud == edge.p1)[0][0], np.where(self.point_cloud == edge.p2)[0][0], np.where(self.point_cloud == third_point)[0][0])
         # np.where(xxx)[0][0] gets the index of the point in the point cloud for use in saving to file later
         return Face((edge.p1, edge.p2, third_point), (edge, second_edge, third_edge), (np.where(self.point_cloud == edge.p1)[0][0], np.where(self.point_cloud == edge.p2)[0][0], np.where(self.point_cloud == third_point)[0][0]))
@@ -180,8 +175,9 @@ class BallPivotingAlgorithm:
             self.faces.append(face)
             
             edge = face.get_new_edge() # <---- To understand how this works, please check face.py (It's quite simple but important)
-            (i+1)
+            print(f"Point: {i+1}/{self.iterations} ☑️")
             k = 0
+            # If you can't find the next edge, check on all other faces to see if there is one available, if not, quit as there are no more faces to add
             while edge == None:
                 if k > len(self.faces): self.write_to_file(); quit()
                 face = self.faces[k]
@@ -192,13 +188,14 @@ class BallPivotingAlgorithm:
 
         return np.array([])
 
-def main(iterations:int):
+def main(radius:float, file_location:str, iterations:int):
 
-    bpa = BallPivotingAlgorithm(0.0025, file_location='stanford-bunny.obj', iterations=iterations)
+    bpa = BallPivotingAlgorithm(radius=radius, file_location=file_location, iterations=iterations)
     bpa.run()
 
     pass
 
 
 if __name__ == '__main__':
-    main(iterations=30)
+
+    main(radius=0.003, file_location='stanford-bunny.obj', iterations=50)
